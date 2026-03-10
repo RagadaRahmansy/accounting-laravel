@@ -2,9 +2,9 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\ServiceProvider;
 
 class LoggingServiceProvider extends ServiceProvider
 {
@@ -26,7 +26,7 @@ class LoggingServiceProvider extends ServiceProvider
     public function boot()
     {
         // Enable query logging in development
-        if ($this->app->environment('local', 'development')) {
+        if ($this->app->environment('local', 'development', 'testing')) {
             $this->enableQueryLogging();
         }
     }
@@ -37,7 +37,7 @@ class LoggingServiceProvider extends ServiceProvider
     protected function enableQueryLogging()
     {
         if (config('app.debug')) {
-            \DB::listen(function ($query) {
+            DB::listen(function ($query) {
                 // Log slow queries (> 1000ms)
                 if ($query->time > 1000) {
                     Log::channel('query')->warning('Slow Query Detected', [

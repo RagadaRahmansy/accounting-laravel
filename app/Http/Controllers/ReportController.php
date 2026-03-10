@@ -11,6 +11,10 @@ class ReportController extends Controller{
         return view('pages.report-pengeluaran');
     }
     public function pengeluaranCetak(Request $req){
+        $req->validate([
+            'date_start' => 'required|date',
+            'date_end' => 'required|date|after_or_equal:date_start'
+        ]);
         $trxs = Transaction::where('status','cash')
             ->whereDate('created_at', '>=', $req->date_start)
             ->whereDate('created_at', '<=', $req->date_end)
@@ -21,10 +25,14 @@ class ReportController extends Controller{
     }
 
     public function pemasukan(){
-        return view('pages.report-pemasukan'); 
+        return view('pages.report-pemasukan');
     }
     public function pemasukanCetak(Request $req){
-        $pemasukan = LayawayDetail::where('paid','!=','null')
+        $req->validate([
+            'date_start' => 'required|date',
+            'date_end' => 'required|date|after_or_equal:date_start'
+        ]);
+        $pemasukan = LayawayDetail::whereNotNull('paid')
             ->whereDate('paid_at', '>=', $req->date_start)
             ->whereDate('paid_at', '<=', $req->date_end)
             ->orderBy('paid_at', 'ASC')
@@ -36,18 +44,22 @@ class ReportController extends Controller{
         return view('pages.report-both');
     }
     public function bothCetak(Request $req){
+        $req->validate([
+            'date_start' => 'required|date',
+            'date_end' => 'required|date|after_or_equal:date_start'
+        ]);
         $pengeluaran = Transaction::where('status','cash')
             ->whereDate('created_at', '>=', $req->date_start)
             ->whereDate('created_at', '<=', $req->date_end)
             ->orderBy('created_at', 'ASC')
             ->get();
 
-        $pemasukan =  LayawayDetail::with('layaway')->where('paid','!=','null')
+        $pemasukan =  LayawayDetail::with('layaway')->whereNotNull('paid')
             ->whereDate('paid_at', '>=', $req->date_start)
             ->whereDate('paid_at', '<=', $req->date_end)
             ->orderBy('paid_at', 'ASC')
             ->get();
-    
+
         $pengeluaran_grand_total = $pengeluaran->sum('final_price');
         $pemasukan_grand_total = $pemasukan->sum('paid');
         $grand_total = $pemasukan_grand_total - $pengeluaran_grand_total;
@@ -60,6 +72,6 @@ class ReportController extends Controller{
 
     public function history(){
         return view('pages.report-pengeluaran');
-        
+
     }
 }
