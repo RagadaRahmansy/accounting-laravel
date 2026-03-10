@@ -1,4 +1,4 @@
-name: Code Quality
+name: Pint Code Quality
 
 on:
   push:
@@ -9,25 +9,22 @@ on:
 jobs:
   pint:
     runs-on: ubuntu-latest
-
+    name: Run Laravel Pint
     steps:
-    - uses: shivammathur/setup-php@15
-      with:
-        php-version: '8.1'
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
 
-    - name: Install Dependencies
-      run: composer install --no-progress --prefer-dist
+      - name: Install composer dependencies
+        run: composer install --no-progress --prefer-dist
 
-    - name: Run Laravel Pint
-      run: vendor/bin/pint
+      - name: Run Pint
+        run: ./vendor/bin/pint --test
 
-    - name: Check for changes
-      run: |
-        if [ -n "$(git status --porcelain)" ]; then
-          echo "Code style violations found. Run 'vendor/bin/pint' to fix."
-          git diff
-          exit 1
-        fi
+      - name: Show changed files
+        if: failure()
+        run: git diff --name-only
