@@ -1,0 +1,156 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model contractor_details {
+  id            BigInt    @id @default(autoincrement())
+  contractor_id BigInt
+  periode       Int
+  pay           Int?
+  payment_date  DateTime? @db.Date
+  jatuh_tempo   DateTime  @db.Date
+  note          String?   @db.VarChar(255)
+  created_at    DateTime? @db.Timestamp(6)
+  updated_at    DateTime? @db.Timestamp(6)
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model contractors {
+  id              BigInt    @id @default(autoincrement())
+  contractor_name String    @db.VarChar(255)
+  contractor_wa   String    @db.VarChar(255)
+  keterangan      String    @db.VarChar(255)
+  interval        String    @db.VarChar(10)
+  created_at      DateTime? @db.Timestamp(6)
+  updated_at      DateTime? @db.Timestamp(6)
+}
+
+model failed_jobs {
+  id         BigInt   @id @default(autoincrement())
+  uuid       String   @unique @db.VarChar(255)
+  connection String
+  queue      String
+  payload    String
+  exception  String
+  failed_at  DateTime @default(now()) @db.Timestamp(6)
+}
+
+model items_categories {
+  id         BigInt    @id @default(autoincrement())
+  name       String    @db.VarChar(255)
+  note       String?   @db.VarChar(255)
+  created_at DateTime? @db.Timestamp(6)
+  updated_at DateTime? @db.Timestamp(6)
+}
+
+model layaway_details {
+  id          BigInt    @id @default(autoincrement())
+  layaway_id  BigInt
+  month       Int
+  jatuh_tempo DateTime  @db.Date
+  paid        Int?
+  paid_at     DateTime? @db.Date
+  note        String?   @db.VarChar(255)
+  created_at  DateTime? @db.Timestamp(6)
+  updated_at  DateTime? @db.Timestamp(6)
+}
+
+model layaways {
+  id            BigInt    @id @default(autoincrement())
+  is_finish     Boolean   @default(false)
+  customer_name String    @db.VarChar(255)
+  customer_wa   String    @db.VarChar(255)
+  tenor         Int
+  project       String    @db.VarChar(255)
+  block         String    @db.VarChar(255)
+  price         Int
+  note          String?   @db.VarChar(255)
+  created_at    DateTime? @db.Timestamp(6)
+  updated_at    DateTime? @db.Timestamp(6)
+}
+
+model migrations {
+  id        Int    @id @default(autoincrement())
+  migration String @db.VarChar(255)
+  batch     Int
+}
+
+model personal_access_tokens {
+  id             BigInt    @id @default(autoincrement())
+  tokenable_type String    @db.VarChar(255)
+  tokenable_id   BigInt
+  name           String    @db.VarChar(255)
+  token          String    @unique @db.VarChar(64)
+  abilities      String?
+  last_used_at   DateTime? @db.Timestamp(6)
+  expires_at     DateTime? @db.Timestamp(6)
+  created_at     DateTime? @db.Timestamp(6)
+  updated_at     DateTime? @db.Timestamp(6)
+
+  @@index([tokenable_type, tokenable_id], map: "personal_access_tokens_tokenable_type_tokenable_id_index")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model stock_histories {
+  id         BigInt    @id @default(autoincrement())
+  stock_id   BigInt
+  alocate_to String    @db.VarChar(255)
+  action     String    @db.VarChar(10)
+  quantity   Int
+  note       String?   @db.VarChar(255)
+  created_at DateTime? @db.Timestamp(6)
+  updated_at DateTime? @db.Timestamp(6)
+}
+
+model stocks {
+  id          BigInt    @id @default(autoincrement())
+  category_id BigInt
+  name        String    @db.VarChar(255)
+  quantity    Int       @default(0)
+  unit        String?   @db.VarChar(255)
+  note        String?   @db.VarChar(255)
+  created_at  DateTime? @db.Timestamp(6)
+  updated_at  DateTime? @db.Timestamp(6)
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model transcations {
+  id          BigInt    @id @default(autoincrement())
+  type_id     BigInt
+  name        String    @db.VarChar(255)
+  quantity    Int
+  price       Int
+  final_price Int
+  unit        String    @db.VarChar(255)
+  status      String    @db.VarChar(20)
+  jatuh_tempo DateTime? @db.Date
+  paid_at     DateTime? @db.Date
+  note        String?   @db.VarChar(255)
+  created_at  DateTime? @db.Timestamp(6)
+  updated_at  DateTime? @db.Timestamp(6)
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model trx_types {
+  id         BigInt    @id @default(autoincrement())
+  name       String    @db.VarChar(255)
+  cash_flow  String    @db.VarChar(10)
+  created_at DateTime? @db.Timestamp(6)
+  updated_at DateTime? @db.Timestamp(6)
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model users {
+  id         BigInt    @id @default(autoincrement())
+  full_name  String    @db.VarChar(255)
+  username   String    @unique @db.VarChar(255)
+  role       String    @db.VarChar(20)
+  password   String    @db.VarChar(255)
+  created_at DateTime? @db.Timestamp(6)
+  updated_at DateTime? @db.Timestamp(6)
+}

@@ -1,0 +1,19 @@
+Loaded Prisma config from prisma.config.ts.
+
+Prisma schema loaded from prisma\schema.prisma.
+Datasource "db": PostgreSQL database "laravelraga", schema "public" at "localhost:5432"
+
+- Introspecting based on datasource defined in prisma\schema.prisma
+Γ£û Introspecting based on datasource defined in prisma\schema.prisma
+Error: 
+P1003 The introspected database does not exist:
+
+prisma db pull could not create any models in your schema.prisma file and you will not be able to generate Prisma Client with the prisma generate command.
+
+To fix this, you have two options:
+
+- manually create a database.
+- make sure the database connection URL inside the datasource block in schema.prisma points to an existing database.
+
+Then you can run prisma db pull again.
+

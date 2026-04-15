@@ -1,0 +1,17 @@
+import * as Prisma from './internal/prismaNamespaceBrowser.js';
+export { Prisma };
+export * as $Enums from './enums.js';
+export * from './enums.js';
+export type contractor_details = Prisma.contractor_detailsModel;
+export type contractors = Prisma.contractorsModel;
+export type failed_jobs = Prisma.failed_jobsModel;
+export type items_categories = Prisma.items_categoriesModel;
+export type layaway_details = Prisma.layaway_detailsModel;
+export type layaways = Prisma.layawaysModel;
+export type migrations = Prisma.migrationsModel;
+export type personal_access_tokens = Prisma.personal_access_tokensModel;
+export type stock_histories = Prisma.stock_historiesModel;
+export type stocks = Prisma.stocksModel;
+export type transcations = Prisma.transcationsModel;
+export type trx_types = Prisma.trx_typesModel;
+export type users = Prisma.usersModel;
